@@ -1,11 +1,11 @@
 import { Ticket } from "@prisma/client";
 import clsx from "clsx";
-import { LucideSquareArrowOutUpRight } from "lucide-react";
+import { LucidePencil, LucideSquareArrowOutUpRight } from "lucide-react";
 import { LucideTrash2 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ticketPath } from "@/paths";
+import { ticketEditPath,ticketPath } from "@/paths";
 import { deleteTicket } from "../actions/delete-ticket";
 import { TICKET_ICONS } from "../constants";
 
@@ -17,7 +17,7 @@ type TicketItemProps = {
 const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
   const detailButton = (
     <Link prefetch className="text-sm" href={ticketPath(ticket.id)}>
-      <Button variant="outline" asChild size="icon">
+      <Button variant="outline" size="icon">
         <LucideSquareArrowOutUpRight className="w-4 h-4" />
       </Button>
     </Link>
@@ -25,10 +25,18 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
 
   const deleteButton = (
     <form action={deleteTicket.bind(null, ticket.id)}>
-      <Button variant="outline">
+      <Button variant="outline" size="icon">
         <LucideTrash2 className="w-4 h-4" />
       </Button>
     </form>
+  );
+
+  const editButton = (
+    <Button variant="outline" size="icon" asChild>
+      <Link prefetch href={ticketEditPath(ticket.id)}>
+        <LucidePencil className="w-4 h-4" />
+      </Link>
+    </Button>
   );
 
   return (
@@ -56,7 +64,17 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
         </CardContent>
       </Card>
       <div className="flex flex-col gap-y-1">
-        {!isDetail ? detailButton : deleteButton}
+        {isDetail ? (
+          <>
+            {editButton}
+            {deleteButton}
+          </>
+        ) : (
+          <>
+            {detailButton}
+            {editButton}
+          </>
+        )}
       </div>
     </div>
   );
