@@ -3,10 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { ticketsPath } from "@/paths";
+import { ticketPath, ticketsPath } from "@/paths";
 
 export const upsertTicket = async (
   id: string | undefined,
+  _actionState: { message: string },
   formData: FormData
 ) => {
   const data = {
@@ -29,5 +30,12 @@ export const upsertTicket = async (
   });
 
   revalidatePath(ticketsPath());
-  redirect(ticketsPath());
+
+  if (id) {
+    redirect(ticketPath(id));
+  }
+
+  return {
+    message: "Ticket created",
+  };
 };
