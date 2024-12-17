@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { RedirectToast } from "@/components/redirect-toast";
 import { TicketItem } from "@/features/ticket/components/ticket-item";
 import { getTicket } from "@/features/ticket/queries/get-ticket";
 
@@ -17,20 +18,13 @@ const TicketPage = async ({ params }: TicketPageProps) => {
   }
 
   return (
-    <div className="flex justify-center animate-fade-in-from-top">
-      <TicketItem ticket={ticket} isDetail />
-    </div>
+    <>
+      <div className="flex justify-center animate-fade-in-from-top">
+        <TicketItem ticket={ticket} isDetail />
+      </div>
+      <RedirectToast />
+    </>
   );
 };
-
-// export async function generateStaticParams() {
-//   const tickets = await getTickets();
-
-//   return tickets.map((ticket) => {
-//     return {
-//       ticketId: ticket.id,
-//     };
-//   });
-// }
 
 export default TicketPage;
